@@ -1,14 +1,15 @@
 #include "bip_buffer.h"
-bip_buffer::bip_buffer(std::size_t size) { /*{{{*/
-	this->b0 = new uint8_t[size];
+template<typename T>bip_buffer<T>::bip_buffer(std::size_t size) { /*{{{*/
+
+	this->b0 = new T[size];
 	this->b1 = this->b0+size;
 	this->p0 = this->p1 = this->q0 = this->q1 = this->b0;
 
 } /*}}}*/
-bip_buffer::~bip_buffer(void) { /*{{{*/
+template<typename T>bip_buffer<T>::~bip_buffer(void) { /*{{{*/
 	delete[] this->b0;
 } /*}}}*/
-uint8_t *bip_buffer::reserve(std::size_t& amount) { /*{{{*/
+template<typename T>T *bip_buffer<T>::reserve(std::size_t& amount) { /*{{{*/
 
 	if (this->full()) {
 		amount = 0;
@@ -33,37 +34,37 @@ uint8_t *bip_buffer::reserve(std::size_t& amount) { /*{{{*/
 	return *this->w;
 
 } /*}}}*/
-uint8_t *bip_buffer::reserve(std::size_t&& amount) { /*{{{*/
-	size_t a = amount;
+template<typename T>T *bip_buffer<T>::reserve(std::size_t&& amount) { /*{{{*/
+	std::size_t a = amount;
 	if (a == 0) {
 		return nullptr;
 	}
-	uint8_t *p = this->reserve(a);
+	T *p = this->reserve(a);
 	if (a < amount) {
 		this->commit(0);
 		return nullptr;
 	}
 	return p;
 } /*}}}*/
-void bip_buffer::commit(std::size_t actual) { /*{{{*/
+template<typename T>void bip_buffer<T>::commit(std::size_t actual) { /*{{{*/
 	*this->w += actual;
 } /*}}}*/
-uint8_t *bip_buffer::access(std::size_t& amount) { /*{{{*/
+template<typename T>T *bip_buffer<T>::access(std::size_t& amount) { /*{{{*/
 	amount = this->p1 - this->p0;
 	if (amount != 0) {
 		return this->p0;
 	}
 	return nullptr;
 } /*}}}*/
-uint8_t *bip_buffer::access(std::size_t&& amount) { /*{{{*/
-	size_t a = amount;
-	uint8_t *p = this->access(a);
+template<typename T>T *bip_buffer<T>::access(std::size_t&& amount) { /*{{{*/
+	std::size_t a = amount;
+	T *p = this->access(a);
 	if (a < amount) {
 		return nullptr;
 	}
 	return p;
 } /*}}}*/
-void bip_buffer::consume(std::size_t actual) { /*{{{*/
+template<typename T>void bip_buffer<T>::consume(std::size_t actual) { /*{{{*/
 	this->p0 += actual;
 	if (this->p0 == this->p1) {
 		this->p0 = this->q0;
@@ -71,9 +72,9 @@ void bip_buffer::consume(std::size_t actual) { /*{{{*/
 		this->q0 = this->q1 = this->b0;
 	}
 } /*}}}*/
-bool bip_buffer::empty(void) const { /*{{{*/
+template<typename T>bool bip_buffer<T>::empty(void) const { /*{{{*/
 	return this->p0 == this->p1;
 } /*}}}*/
-bool bip_buffer::full(void) const { /*{{{*/
+template<typename T>bool bip_buffer<T>::full(void) const { /*{{{*/
 	return (this->p0 == this->b0 && this->p1 == this->b1) || (this->p0 != this->b0 && this->q1 == this->p0);
 } /*}}}*/

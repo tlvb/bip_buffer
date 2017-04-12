@@ -3,9 +3,11 @@ CXX=g++
 INC=src
 
 vpath %.cc src testsrc
+vpath %.tcc src
 vpath %.h src
 
-CXXFLAGS=-I$(INC)
+CXXFLAGS += -Werror -Wall -Wextra -Wpedantic -Wshadow -Wundef -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Waggregate-return -Wcast-qual -Wswitch-default -Wswitch-enum
+CXXFLAGS += -I$(INC)
 
 .PHONY: perform_test
 perform_test: test_bip_buffer
@@ -13,11 +15,8 @@ perform_test: test_bip_buffer
 	./test_bip_buffer
 	@echo
 
-test_bip_buffer: test_bip_buffer.cc bip_buffer.o
+test_bip_buffer: bip_buffer.tcc test_bip_buffer.cc
 	$(CXX) $(CXXFLAGS) -o $@ $^
-
-bip_buffer.o: bip_buffer.cc bip_buffer.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: clean cleaner
 clean:

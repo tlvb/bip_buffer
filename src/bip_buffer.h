@@ -1,25 +1,25 @@
+#pragma once
 #include <cstddef>
-#include <cstdint>
-class bip_buffer {
+template <typename T> class bip_buffer {
 	private:
-		uint8_t *b0;
-		uint8_t *b1;
+		T *b0;
+		T *b1;
 
-		uint8_t *p0, *p1;
-		uint8_t *q0, *q1;
+		T *p0, *p1;
+		T *q0, *q1;
 
-		uint8_t **w;
+		T **w;
 
 	public:
 		bip_buffer(std::size_t size);
 		~bip_buffer(void);
 
-		uint8_t *reserve(std::size_t& amount);
-		uint8_t *reserve(std::size_t&& amount);
+		T *reserve(std::size_t& amount);
+		T *reserve(std::size_t&& amount);
 		void commit(std::size_t actual);
 
-		uint8_t *access(std::size_t& amount);
-		uint8_t *access(std::size_t&& amount);
+		T *access(std::size_t& amount);
+		T *access(std::size_t&& amount);
 		void consume(std::size_t actual);
 
 		bool empty(void) const;

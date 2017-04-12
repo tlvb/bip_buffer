@@ -1,22 +1,22 @@
 #include "bip_buffer.h"
+#include "bip_buffer.tcc"
 #include <cassert>
 #include <iostream>
 
 using namespace std;
 
-int main(void) {
-	bip_buffer b(8);
+int  main(void) {
+	bip_buffer<uint32_t> b(8);
 
-	uint8_t *p = nullptr;
-	uint8_t *base = nullptr;
-	const uint8_t *c = nullptr;
-	size_t n = 0;
+	uint32_t *p = nullptr;
+	uint32_t *base = nullptr;
+	std::size_t n = 0;
 
 	assert( b.empty() );
 	assert( !b.full() );
-	// The upper row shows the primary (p0,p1) pointers, W means they point at the same index
-	// otherwise a 0 or a 1 will be placed at the index they point at. On the lowermost row
-	// the secondary (q0,q1) pointers are shown, same thing, but an M is used instead of W
+	// The upper row shows the primary (p0,p1) postd::size_ters, W means they postd::size_t at the same index
+	// otherwise a 0 or a 1 will be placed at the index they postd::size_t at. On the lowermost row
+	// the secondary (q0,q1) postd::size_ters are shown, same thing, but an M is used instead of W
 	// pW
 	// [0|1|2|3|4|5|6|7]
 	// qM
@@ -74,7 +74,7 @@ int main(void) {
 	assert( p == base+6 );
 
 	// when using an rvalue reference we will only
-	// receive a valid pointer if at least as much
+	// receive a valid postd::size_ter if at least as much
 	// as we asked for is able to be reserved, because
 	// we have no way of knowing the available amount
 	p = b.reserve(3);
