@@ -6,7 +6,11 @@
 using namespace std;
 
 int  main(void) {
-	bip_buffer<uint32_t> b(8);
+	bip_buffer<uint32_t> a(8), b(8);
+
+	bip_buffer<uint32_t> c = bip_buffer<uint32_t>(8);
+	b = std::move(c);
+	bip_buffer<uint32_t> d(std::move(a));
 
 	uint32_t *p = nullptr;
 	uint32_t *base = nullptr;

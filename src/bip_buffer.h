@@ -11,7 +11,13 @@ template <typename T> class bip_buffer {
 		T **w;
 
 	public:
+		bip_buffer(void);
 		bip_buffer(std::size_t size);
+		bip_buffer(const bip_buffer<T>& other) = delete;
+		bip_buffer(bip_buffer<T>&& other);
+		bip_buffer<T>& operator=(const bip_buffer<T>& other) = delete;
+		bip_buffer<T>& operator=(bip_buffer<T>&& other);
+
 		~bip_buffer(void);
 
 		T *reserve(std::size_t& amount);

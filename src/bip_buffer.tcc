@@ -1,13 +1,46 @@
 #include "bip_buffer.h"
-template<typename T>bip_buffer<T>::bip_buffer(std::size_t size) { /*{{{*/
-
-	this->b0 = new T[size];
-	this->b1 = this->b0+size;
-	this->p0 = this->p1 = this->q0 = this->q1 = this->b0;
-
+#include <utility>
+template<typename T>bip_buffer<T>::bip_buffer(void) : /*{{{*/
+	b0(nullptr),
+	b1(nullptr),
+	p0(nullptr),
+	p1(nullptr),
+	q0(nullptr),
+	q1(nullptr)
+{} /*}}}*/
+template<typename T>bip_buffer<T>::bip_buffer(std::size_t size) : /*{{{*/
+	b0(new T[size]),
+	b1(b0+size),
+	p0(b0),
+	p1(b0),
+	q0(b0),
+	q1(b0)
+{} /*}}}*/
+template<typename T>bip_buffer<T>::bip_buffer(bip_buffer<T>&& other) : /*{{{*/
+	b0(other.b0),
+	b1(other.b1),
+	p0(other.p0),
+	p1(other.p1),
+	q0(other.q0),
+	q1(other.q1)
+{
+	other.b0 = other.b1 = other.p0 = other.p1 = other.q0 = other.q1 = nullptr;
+} /*}}}*/
+template<typename T>bip_buffer<T>& bip_buffer<T>::operator=(bip_buffer<T>&& other) { /*{{{*/
+	delete[] b0;
+	b0 = other.b0;
+	b1 = other.b1;
+	p0 = other.p0;
+	p1 = other.p1;
+	q0 = other.q0;
+	q1 = other.q1;
+	other.b0 = other.b1 = other.p0 = other.p1 = other.q0 = other.q1 = nullptr;
+	return *this;
 } /*}}}*/
 template<typename T>bip_buffer<T>::~bip_buffer(void) { /*{{{*/
-	delete[] this->b0;
+	if (b0 != nullptr) {
+		delete[] b0;
+	}
 } /*}}}*/
 template<typename T>T *bip_buffer<T>::reserve(std::size_t& amount) { /*{{{*/
 
