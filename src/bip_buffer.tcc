@@ -6,7 +6,8 @@ template<typename T>bip_buffer<T>::bip_buffer(void) : /*{{{*/
 	p0(nullptr),
 	p1(nullptr),
 	q0(nullptr),
-	q1(nullptr)
+	q1(nullptr),
+	w(nullptr)
 {} /*}}}*/
 template<typename T>bip_buffer<T>::bip_buffer(std::size_t size) : /*{{{*/
 	b0(new T[size]),
@@ -14,7 +15,8 @@ template<typename T>bip_buffer<T>::bip_buffer(std::size_t size) : /*{{{*/
 	p0(b0),
 	p1(b0),
 	q0(b0),
-	q1(b0)
+	q1(b0),
+	w(nullptr)
 {} /*}}}*/
 template<typename T>bip_buffer<T>::bip_buffer(bip_buffer<T>&& other) : /*{{{*/
 	b0(other.b0),
@@ -22,9 +24,11 @@ template<typename T>bip_buffer<T>::bip_buffer(bip_buffer<T>&& other) : /*{{{*/
 	p0(other.p0),
 	p1(other.p1),
 	q0(other.q0),
-	q1(other.q1)
+	q1(other.q1),
+	w(other.w)
 {
 	other.b0 = other.b1 = other.p0 = other.p1 = other.q0 = other.q1 = nullptr;
+	other.w = nullptr;
 } /*}}}*/
 template<typename T>bip_buffer<T>& bip_buffer<T>::operator=(bip_buffer<T>&& other) { /*{{{*/
 	delete[] b0;
@@ -35,6 +39,7 @@ template<typename T>bip_buffer<T>& bip_buffer<T>::operator=(bip_buffer<T>&& othe
 	q0 = other.q0;
 	q1 = other.q1;
 	other.b0 = other.b1 = other.p0 = other.p1 = other.q0 = other.q1 = nullptr;
+	other.w = nullptr;
 	return *this;
 } /*}}}*/
 template<typename T>bip_buffer<T>::~bip_buffer(void) { /*{{{*/
